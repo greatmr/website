@@ -134,10 +134,20 @@ export function BookShell({ spreads }: Props) {
 
         <Progress total={totalPages} current={currentPage} onJump={jumpTo} />
 
-        <div className="book__footer">
-          — {String(currentPage + 1).padStart(2, "0")} /{" "}
-          {String(totalPages).padStart(2, "0")} · {meta.label} —
-        </div>
+        {isMobile ? (
+          <div className={"book__pageno book__pageno--" + (side === 0 ? "left" : "right")}>
+            {String(spread * 2 + side + 1).padStart(2, "0")}
+          </div>
+        ) : (
+          <>
+            <div className="book__pageno book__pageno--left">
+              {String(spread * 2 + 1).padStart(2, "0")}
+            </div>
+            <div className="book__pageno book__pageno--right">
+              {String(spread * 2 + 2).padStart(2, "0")}
+            </div>
+          </>
+        )}
       </div>
 
       <ThemeSwitch value={theme} onChange={setTheme} />

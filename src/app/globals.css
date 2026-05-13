@@ -520,34 +520,29 @@
     left: 70px;
     bottom: 36px;
     display: flex;
-    gap: 12px;
+    gap: 16px;
     z-index: 10;
   }
 
-  .pagenav--right {
-    left: auto;
-    right: 70px;
-  }
-
   .pagebtn {
-    width: 46px;
-    height: 46px;
-    border: 2px solid var(--ink);
+    width: 50px;
+    height: 50px;
+    border: 0;
     background: transparent;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition:
-      background 0.2s,
       color 0.2s,
       transform 0.15s;
     color: var(--ink);
   }
 
   .pagebtn:hover {
-    background: var(--ink);
-    color: var(--paper);
+    color: var(--accent);
+    transform: translateY(-1px);
   }
 
   .pagebtn:active {
@@ -555,8 +550,9 @@
   }
 
   .pagebtn svg {
-    width: 20px;
-    height: 20px;
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   .pagebtn[disabled] {
@@ -567,8 +563,7 @@
   .progress {
     position: absolute;
     bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
+    right: 70px;
     display: flex;
     gap: 14px;
     z-index: 10;
@@ -1283,18 +1278,25 @@
     display: contents;
   }
 
-  .book__footer {
+  .book__pageno {
     position: absolute;
-    left: 0;
-    right: 0;
     bottom: 18px;
-    text-align: center;
     font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.24em;
-    text-transform: uppercase;
     color: var(--ink-mute);
     pointer-events: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .book__pageno--left {
+    /* number for the left page, anchored near the inner (right) edge */
+    right: calc(50% + 24px);
+  }
+
+  .book__pageno--right {
+    /* number for the right page, anchored near the inner (left) edge */
+    left: calc(50% + 24px);
   }
 
   /* theme switcher */
@@ -1427,18 +1429,16 @@
     .pagenav {
       left: 16px;
       bottom: 70px;
-    }
-
-    .pagenav--right {
-      right: 16px;
+      gap: 10px;
     }
 
     .pagebtn {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
     }
 
     .progress {
+      right: 16px;
       bottom: 36px;
       gap: 8px;
     }
@@ -1448,10 +1448,18 @@
       height: 8px;
     }
 
-    .book__footer {
+    .book__pageno {
       bottom: 12px;
       font-size: 9.5px;
       letter-spacing: 0.18em;
+    }
+
+    .book__pageno--left {
+      right: 16px;
+    }
+
+    .book__pageno--right {
+      left: 16px;
     }
 
     /* drawer */
