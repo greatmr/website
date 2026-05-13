@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, type ReactNode } from "react"
+import { BookNavProvider } from "./BookNavContext"
 import { Drawer } from "./Drawer"
 import { Hamburger } from "./Hamburger"
 import { PageNav } from "./PageNav"
@@ -39,8 +40,11 @@ export function BookShell({ spreads }: Props) {
   const isMobile = useMediaQuery("(max-width: 767px)")
 
   const lastSpread = spreads.length - 1
-  const totalPages = isMobile ? spreads.length * 2 : spreads.length
-  const currentPage = isMobile ? spread * 2 + side : spread
+  // The cover (spread 0) is the book's front/back, not a page.
+  const isCover = spread === 0
+  const contentSpreadCount = Math.max(0, spreads.length - 1)
+  const totalPages = isMobile ? contentSpreadCount * 2 : contentSpreadCount
+  const currentPage = isMobile ? (spread - 1) * 2 + side : spread - 1
 
   const prev = () => {
     if (isMobile) {
@@ -70,10 +74,10 @@ export function BookShell({ spreads }: Props) {
 
   const jumpTo = (pageIdx: number) => {
     if (isMobile) {
-      setSpread(Math.floor(pageIdx / 2))
+      setSpread(Math.floor(pageIdx / 2) + 1)
       setSide((pageIdx % 2) as Side)
     } else {
-      setSpread(pageIdx)
+      setSpread(pageIdx + 1)
     }
   }
 
@@ -90,9 +94,21 @@ export function BookShell({ spreads }: Props) {
   const current = spreads[spread] ?? spreads[0]
   const meta = SPREADS[spread] ?? SPREADS[0]
 
+  const navValue = {
+    goToSpread: (idx: number) => {
+      setSpread(idx)
+      setSide(0)
+    },
+    currentSpread: spread,
+  }
+
   return (
+    <BookNavProvider value={navValue}>
     <div className={`book-root theme-${theme}`}>
-      <div className="book" data-mobile-side={side === 0 ? "left" : "right"}>
+      <div
+        className={"book" + (isCover ? " book--cover" : "")}
+        data-mobile-side={side === 0 ? "left" : "right"}
+      >
         <Drawer
           open={drawerOpen}
           current={spreadToTab(spread)}
@@ -117,40 +133,57 @@ export function BookShell({ spreads }: Props) {
           </>
         )}
 
-        <div className="menu-logo">
+        <button
+          type="button"
+          className="menu-logo"
+          onClick={() => {
+            setSpread(0)
+            setSide(0)
+          }}
+          aria-label="Go to cover"
+        >
           <JahanLogo />
-        </div>
+        </button>
 
         <div className="spread" key={`${spread}-${side}`}>
           {current.node}
         </div>
 
-        <PageNav
-          onPrev={prev}
-          onNext={next}
-          canPrev={currentPage > 0}
-          canNext={currentPage < totalPages - 1}
-        />
-
-        <Progress total={totalPages} current={currentPage} onJump={jumpTo} />
-
-        {isMobile ? (
-          <div className={"book__pageno book__pageno--" + (side === 0 ? "left" : "right")}>
-            {String(spread * 2 + side + 1).padStart(2, "0")}
-          </div>
-        ) : (
+        {!isCover && (
           <>
-            <div className="book__pageno book__pageno--left">
-              {String(spread * 2 + 1).padStart(2, "0")}
-            </div>
-            <div className="book__pageno book__pageno--right">
-              {String(spread * 2 + 2).padStart(2, "0")}
-            </div>
+            <PageNav
+              onPrev={prev}
+              onNext={next}
+              canPrev={currentPage > 0}
+              canNext={currentPage < totalPages - 1}
+            />
+
+            <Progress total={totalPages} current={currentPage} onJump={jumpTo} />
+
+            {isMobile ? (
+              <div
+                className={
+                  "book__pageno book__pageno--" + (side === 0 ? "left" : "right")
+                }
+              >
+                {String((spread - 1) * 2 + side + 1).padStart(2, "0")}
+              </div>
+            ) : (
+              <>
+                <div className="book__pageno book__pageno--left">
+                  {String((spread - 1) * 2 + 1).padStart(2, "0")}
+                </div>
+                <div className="book__pageno book__pageno--right">
+                  {String((spread - 1) * 2 + 2).padStart(2, "0")}
+                </div>
+              </>
+            )}
           </>
         )}
       </div>
 
       <ThemeSwitch value={theme} onChange={setTheme} />
     </div>
+    </BookNavProvider>
   )
 }

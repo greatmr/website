@@ -1,6 +1,7 @@
 "use client";
 
 import { JahanLogo } from "@/components/svg/JahanLogo";
+import { useBookNav } from "./BookNavContext";
 
 type Item = {
   n: string;
@@ -23,6 +24,7 @@ type Props = {
 };
 
 export function Drawer({ open, current, onClose, onNavigate }: Props) {
+  const { goToSpread } = useBookNav();
   return (
     <>
       <div
@@ -37,9 +39,17 @@ export function Drawer({ open, current, onClose, onNavigate }: Props) {
         >
           ✕
         </button>
-        <div className="drawer__logo">
+        <button
+          type="button"
+          className="drawer__logo"
+          onClick={() => {
+            goToSpread(0);
+            onClose();
+          }}
+          aria-label="Go to cover"
+        >
           <JahanLogo />
-        </div>
+        </button>
         <nav>
           {ITEMS.map((it, i) => (
             <div
