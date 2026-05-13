@@ -1,4 +1,5 @@
 import { Tile, type TileKind } from "@/components/svg/Tile"
+import { asset } from "@/lib/asset"
 
 type ThumbItem = { kind: TileKind; caption: string }
 
@@ -62,7 +63,7 @@ export function AboutSpread() {
               <div className="ph">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/my.png"
+                  src={asset("/my.png")}
                   alt="My"
                   aria-hidden="true"
                 />

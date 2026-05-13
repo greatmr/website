@@ -25,10 +25,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   return (
     <html
       lang="en"
       className={`${mono.variable} ${slab.variable} antialiased`}
+      style={{ ["--paper-bg" as string]: `url('${base}/paper.png')` }}
     >
       <body>{children}</body>
     </html>

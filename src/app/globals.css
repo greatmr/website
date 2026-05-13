@@ -209,7 +209,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     overflow: hidden;
-    background: var(--paper) url('/paper.png') center center / cover no-repeat;
+    background: var(--paper) var(--paper-bg) center center / cover no-repeat;
     box-shadow:
       0 30px 80px -20px rgba(20, 30, 55, 0.35),
       0 10px 30px rgba(20, 30, 55, 0.18);

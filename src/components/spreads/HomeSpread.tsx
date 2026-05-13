@@ -1,3 +1,5 @@
+import { asset } from "@/lib/asset";
+
 export function HomeSpread() {
   return (
     <>
@@ -11,7 +13,7 @@ export function HomeSpread() {
 
           <div className="land-photo">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/my.png" alt="My" aria-hidden="true" />
+            <img src={asset("/my.png")} alt="My" aria-hidden="true" />
           </div>
 
           <div className="land-decor-orange" />

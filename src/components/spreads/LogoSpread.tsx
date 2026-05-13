@@ -1,3 +1,5 @@
+import { asset } from "@/lib/asset";
+
 export function LogoSpread() {
   return (
     <>
@@ -5,7 +7,7 @@ export function LogoSpread() {
         <div className="logo-stage">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/group.svg"
+            src={asset("/group.svg")}
             alt="PORTFOLIO"
             className="logo-group-img"
           />
@@ -16,9 +18,9 @@ export function LogoSpread() {
         <div className="logo-stage">
           <div className="logo-combo" aria-label="PORTFOLIO">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/mark.svg" alt="" aria-hidden="true" className="logo-combo__mark" />
+            <img src={asset("/mark.svg")} alt="" aria-hidden="true" className="logo-combo__mark" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/portfolio.svg" alt="" aria-hidden="true" className="logo-combo__text" />
+            <img src={asset("/portfolio.svg")} alt="" aria-hidden="true" className="logo-combo__text" />
           </div>
         </div>
       </section>
