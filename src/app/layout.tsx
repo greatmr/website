@@ -30,7 +30,10 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${mono.variable} ${slab.variable} antialiased`}
-      style={{ ["--paper-bg" as string]: `url('${base}/paper.png')` }}
+      style={{
+        ["--paper-bg" as string]: `url('${base}/paper.png')`,
+        ["--jahan-logo" as string]: `url('${base}/jahan-logo.svg')`,
+      }}
     >
       <body>{children}</body>
     </html>
