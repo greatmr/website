@@ -1,5 +1,6 @@
 "use client"
 
+import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import { BookNavProvider } from "./BookNavContext"
 import { Drawer } from "./Drawer"
@@ -16,6 +17,30 @@ import {
 } from "@/lib/spreads"
 import type { ThemeName } from "@/lib/themes"
 
+const COVER_PATH = "/"
+
+type Side = 0 | 1
+
+function spreadIndexFromId(id: string | undefined) {
+  if (!id) return 0
+  const idx = SPREADS.findIndex((s) => s.id === id)
+  return idx === -1 ? 0 : idx
+}
+
+function pathFor(idx: number, side: Side) {
+  const meta = SPREADS[idx]
+  if (!meta || idx === 0) return COVER_PATH
+  return side === 1 ? `/${meta.id}/right` : `/${meta.id}`
+}
+
+function locationFromPathname(pathname: string): { spread: number; side: Side } {
+  if (pathname === COVER_PATH) return { spread: 0, side: 0 }
+  const parts = pathname.replace(/^\//, "").split("/")
+  const spread = spreadIndexFromId(parts[0])
+  const side: Side = parts[1] === "right" ? 1 : 0
+  return { spread, side }
+}
+
 type SpreadSlot = {
   id: string
   label: string
@@ -26,13 +51,24 @@ type SpreadSlot = {
 
 type Props = {
   spreads: readonly SpreadSlot[]
+  initialSpreadId?: string
 }
 
-type Side = 0 | 1
+export function BookShell({ spreads, initialSpreadId }: Props) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const location = pathname
+    ? locationFromPathname(pathname)
+    : { spread: spreadIndexFromId(initialSpreadId), side: 0 as Side }
+  const spread = location.spread
+  const side = location.side
 
-export function BookShell({ spreads }: Props) {
-  const [spread, setSpread] = useState(0)
-  const [side, setSide] = useState<Side>(0)
+  const setLocation = (idx: number, nextSide: Side) => {
+    const target = pathFor(idx, nextSide)
+    if (target !== pathname) {
+      router.replace(target, { scroll: false })
+    }
+  }
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [theme, setTheme] = useState<ThemeName>("cool")
   const spreadRef = useRef<HTMLDivElement | null>(null)
@@ -82,26 +118,24 @@ export function BookShell({ spreads }: Props) {
   const prev = () => {
     if (isMobile) {
       if (side === 1) {
-        setSide(0)
+        setLocation(spread, 0)
       } else if (pos > 0) {
-        setSpread(activeIndices[pos - 1])
-        setSide(1)
+        setLocation(activeIndices[pos - 1], 1)
       }
     } else if (pos > 0) {
-      setSpread(activeIndices[pos - 1])
+      setLocation(activeIndices[pos - 1], 0)
     }
   }
 
   const next = () => {
     if (isMobile) {
       if (side === 0) {
-        setSide(1)
+        setLocation(spread, 1)
       } else if (pos < activeIndices.length - 1) {
-        setSpread(activeIndices[pos + 1])
-        setSide(0)
+        setLocation(activeIndices[pos + 1], 0)
       }
     } else if (pos < activeIndices.length - 1) {
-      setSpread(activeIndices[pos + 1])
+      setLocation(activeIndices[pos + 1], 0)
     }
   }
 
@@ -110,12 +144,11 @@ export function BookShell({ spreads }: Props) {
       const contentIdx = Math.floor(pageIdx / 2)
       const target = activeContentIndices[contentIdx]
       if (target == null) return
-      setSpread(target)
-      setSide((pageIdx % 2) as Side)
+      setLocation(target, (pageIdx % 2) as Side)
     } else {
       const target = activeContentIndices[pageIdx]
       if (target == null) return
-      setSpread(target)
+      setLocation(target, 0)
     }
   }
 
@@ -128,8 +161,7 @@ export function BookShell({ spreads }: Props) {
       target = isActive(2) ? 2 : isActive(3) ? 3 : undefined
     }
     if (target != null && isActive(target)) {
-      setSpread(target)
-      setSide(0)
+      setLocation(target, 0)
     }
   }
 
@@ -146,8 +178,7 @@ export function BookShell({ spreads }: Props) {
 
   const navValue = {
     goToSpread: (idx: number) => {
-      setSpread(idx)
-      setSide(0)
+      setLocation(idx, 0)
     },
     currentSpread: spread,
   }
@@ -184,10 +215,7 @@ export function BookShell({ spreads }: Props) {
             showHamburger
             showLogo={meta.flat || isMobile}
             onHamburger={() => setDrawerOpen(true)}
-            onLogo={() => {
-              setSpread(0)
-              setSide(0)
-            }}
+            onLogo={() => setLocation(0, 0)}
           />
         )}
         {(isCover || !meta.flat) && (
@@ -198,10 +226,7 @@ export function BookShell({ spreads }: Props) {
             showHamburger={!isCover && isMobile}
             showLogo
             onHamburger={() => setDrawerOpen(true)}
-            onLogo={() => {
-              setSpread(0)
-              setSide(0)
-            }}
+            onLogo={() => setLocation(0, 0)}
           />
         )}
 
