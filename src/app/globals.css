@@ -148,6 +148,16 @@
   --gutter: rgba(80, 50, 30, 0.16);
 }
 
+.theme-straw {
+  --paper: #efe5c4;
+  --paper-2: #e3d6a8;
+  --ink: #3a2f10;
+  --ink-soft: #4d3f15;
+  --ink-mute: #806e2e;
+  --accent: #b8932a;
+  --gutter: rgba(70, 55, 15, 0.2);
+}
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -1473,6 +1483,10 @@
 
   .theme-switch button[data-theme="peach"] {
     background: #ffbe98;
+  }
+
+  .theme-switch button[data-theme="straw"] {
+    background: #b8932a;
   }
 
   /* ─────────────────────────────────────────────────────────────────────────
