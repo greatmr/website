@@ -1602,19 +1602,22 @@
 
     .pagenav {
       left: 16px;
-      bottom: 70px;
+      bottom: 30px;
       gap: 10px;
+      align-items: center;
     }
 
     .pagebtn {
-      width: 42px;
-      height: 42px;
+      width: 36px;
+      height: 36px;
     }
 
     .progress {
       right: 16px;
-      bottom: 36px;
+      bottom: 30px;
       gap: 4px;
+      height: 36px;
+      align-items: center;
     }
 
     .progress__dot {
