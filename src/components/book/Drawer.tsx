@@ -9,7 +9,7 @@ type Item = {
   sub: string;
 };
 
-const ITEMS: Item[] = [
+const ITEMS: readonly Item[] = [
   { n: "1", title: "Portfolio", sub: "Cover · logo marks" },
   { n: "2", title: "Home", sub: "About me & summary" },
   { n: "3", title: "Projects", sub: "Projects, Skills & Experiences" },
@@ -21,9 +21,19 @@ type Props = {
   current: number;
   onClose: () => void;
   onNavigate: (tabIndex: number) => void;
+  isTabActive?: (tabIdx: number) => boolean;
 };
 
-export function Drawer({ open, current, onClose, onNavigate }: Props) {
+export function Drawer({
+  open,
+  current,
+  onClose,
+  onNavigate,
+  isTabActive,
+}: Props) {
+  const visibleItems = ITEMS.map((item, i) => ({ item, i })).filter(
+    ({ i }) => (isTabActive ? isTabActive(i) : true),
+  );
   const { goToSpread } = useBookNav();
   return (
     <>
@@ -51,7 +61,7 @@ export function Drawer({ open, current, onClose, onNavigate }: Props) {
           <JahanLogo />
         </button>
         <nav>
-          {ITEMS.map((it, i) => (
+          {visibleItems.map(({ item: it, i }) => (
             <div
               key={it.title}
               className={"menu-item" + (current === i ? " is-current" : "")}
