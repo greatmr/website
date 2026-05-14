@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { asset } from "@/lib/asset"
 
 const HEADLINE: ReadonlyArray<readonly [string, string]> = [
   ["Years building", "8+"],
@@ -14,45 +15,17 @@ export function MoodSpread() {
   return (
     <>
       <section className="page page--left">
-        <div style={{ position: "relative", marginTop: 0 }}>
-          <div
+        <div className="w-full flex justify-center items-center relative mt-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={asset("/image.png")}
+            alt="Mohammadreza Jahantalab"
             style={{
-              position: "absolute",
-              left: -10,
-              top: 0,
-              width: 220,
-              height: 220,
-              borderRadius: "50%",
-              background: "var(--accent)",
-              opacity: 0.9,
+              width: "60%",
             }}
+            className="block object-cover grayscale mix-blend-multiply h-full"
           />
-          <svg
-            viewBox="0 0 260 320"
-            style={{ position: "relative", width: 240, height: 300 }}
-          >
-            <defs>
-              <clipPath id="mood-cmask">
-                <rect x="0" y="0" width="260" height="320" />
-              </clipPath>
-            </defs>
-            <g clipPath="url(#mood-cmask)">
-              <rect x="0" y="0" width="260" height="320" fill="transparent" />
-              <circle cx="130" cy="110" r="56" fill="#cfcec9" />
-              <rect x="118" y="92" width="38" height="14" fill="#1a1d28" />
-              <path d="M52 320 C 52 200, 208 200, 208 320 Z" fill="#cfcec9" />
-              <path
-                d="M165 200 L 220 230 L 220 320 L 165 320 Z"
-                fill="#a8a59c"
-              />
-            </g>
-          </svg>
         </div>
-
-        <h2 className="mono-h" style={{ marginTop: 46, fontSize: 26 }}>
-          <span style={{ color: "var(--accent)" }}>M</span>ohammadreza{" "}
-          <span style={{ color: "var(--accent)" }}>J</span>ahantalab
-        </h2>
 
         <p className="mono-p" style={{ marginTop: 24, maxWidth: 520 }}>
           Hey!
@@ -88,19 +61,18 @@ export function MoodSpread() {
       </section>
 
       <section className="page page--right">
-        <div className="mood" style={{ gridAutoRows: 62 }}>
-          <div className="m1" />
-          <div className="m2" />
-          <div className="m3">P O R T F O L I O</div>
-          <div className="m4" />
-          <div className="m5" />
-          <div className="m6" />
-          <div className="m7">
-            <i />
-          </div>
-          <div className="m8" />
-          <div className="m9" />
-          <div className="m10" />
+        <div style={{ gridAutoRows: 62 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={asset("/project-brand.png")}
+            alt="Project brand"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
         </div>
 
         <h2 className="section-title" style={{ marginTop: 46 }}>

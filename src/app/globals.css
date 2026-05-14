@@ -128,6 +128,26 @@
   --gutter: rgba(0, 0, 0, 0.22);
 }
 
+.theme-mocha {
+  --paper: #ede4d6;
+  --paper-2: #e0d4c0;
+  --ink: #2a2218;
+  --ink-soft: #3c3024;
+  --ink-mute: #756048;
+  --accent: #a47864;
+  --gutter: rgba(60, 40, 25, 0.18);
+}
+
+.theme-peach {
+  --paper: #fff2e8;
+  --paper-2: #ffe6d4;
+  --ink: #3b251a;
+  --ink-soft: #4d3122;
+  --ink-mute: #82604a;
+  --accent: #ffbe98;
+  --gutter: rgba(80, 50, 30, 0.16);
+}
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -1412,6 +1432,14 @@
 
   .theme-switch button[data-theme="ink"] {
     background: #0d0d0e;
+  }
+
+  .theme-switch button[data-theme="mocha"] {
+    background: #a47864;
+  }
+
+  .theme-switch button[data-theme="peach"] {
+    background: #ffbe98;
   }
 
   /* ─────────────────────────────────────────────────────────────────────────
