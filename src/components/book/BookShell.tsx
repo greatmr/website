@@ -35,20 +35,27 @@ export function BookShell({ spreads }: Props) {
   const [side, setSide] = useState<Side>(0)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [theme, setTheme] = useState<ThemeName>("cool")
-  const [isScrolled, setIsScrolled] = useState(false)
   const spreadRef = useRef<HTMLDivElement | null>(null)
+  const bookRef = useRef<HTMLDivElement | null>(null)
   const isMobile = useMediaQuery("(max-width: 767px)")
 
   useEffect(() => {
-    setIsScrolled(false)
     const root = spreadRef.current
-    if (!root) return
+    const book = bookRef.current
+    if (!root || !book) return
     const pages = Array.from(root.querySelectorAll<HTMLElement>(".page"))
+    const apply = (scrolled: boolean) => {
+      book.classList.toggle("is-scrolled", scrolled)
+    }
     const handler = (e: Event) => {
       const t = e.currentTarget as HTMLElement
-      setIsScrolled(t.scrollTop > 4)
+      apply(t.scrollTop > 4)
     }
-    pages.forEach((p) => p.addEventListener("scroll", handler, { passive: true }))
+    pages.forEach((p) => {
+      p.scrollTop = 0
+      p.addEventListener("scroll", handler, { passive: true })
+    })
+    apply(pages.some((p) => p.scrollTop > 4))
     return () => {
       pages.forEach((p) => p.removeEventListener("scroll", handler))
     }
@@ -149,10 +156,10 @@ export function BookShell({ spreads }: Props) {
     <BookNavProvider value={navValue}>
     <div className={`book-root theme-${theme}`}>
       <div
+        ref={bookRef}
         className={
           "book" +
-          (isCover ? " book--cover" : "") +
-          (isScrolled ? " is-scrolled" : "")
+          (isCover ? " book--cover" : "")
         }
         data-mobile-side={side === 0 ? "left" : "right"}
       >
