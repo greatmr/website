@@ -209,7 +209,7 @@
 
   body {
     height: 100vh;
-    height: 100dvh;
+    height: 100svh;
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -235,7 +235,7 @@
     width: 100%;
     max-width: 1400px;
     height: 100vh;
-    height: 100dvh;
+    height: 100svh;
     display: grid;
     grid-template-columns: 1fr 1fr;
     overflow: hidden;
@@ -276,6 +276,10 @@
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: none;
+  }
+
+  .book__topbar {
+    display: none;
   }
 
   .page::-webkit-scrollbar {
@@ -1501,6 +1505,8 @@
       box-shadow: none;
       border-radius: 0;
       min-height: 100vh;
+      min-height: 100svh;
+      height: 100svh;
     }
 
     .book::before,
@@ -1548,6 +1554,7 @@
       top: 24px;
       width: 90%;
       font-size: 11px;
+      transition: color 220ms ease;
     }
 
     .chapter-eyebrow--left,
@@ -1559,6 +1566,35 @@
     .chapter-eyebrow::after {
       margin-top: 12px;
       width: 100%;
+      transition: opacity 220ms ease;
+    }
+
+    .book__topbar {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: var(--paper);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease, box-shadow 220ms ease;
+      z-index: 12;
+    }
+
+    .book.is-scrolled .book__topbar {
+      opacity: 1;
+      background: var(--paper-2);
+      box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.35);
+    }
+
+    .book.is-scrolled .chapter-eyebrow {
+      color: var(--accent);
+    }
+
+    .book.is-scrolled .chapter-eyebrow::after {
+      opacity: 0;
     }
 
     .book[data-mobile-side="left"] .chapter-eyebrow--right {

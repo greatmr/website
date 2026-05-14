@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, type ReactNode } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 import { BookNavProvider } from "./BookNavContext"
 import { Drawer } from "./Drawer"
 import { Hamburger } from "./Hamburger"
@@ -37,7 +37,24 @@ export function BookShell({ spreads }: Props) {
   const [side, setSide] = useState<Side>(0)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [theme, setTheme] = useState<ThemeName>("cool")
+  const [isScrolled, setIsScrolled] = useState(false)
+  const spreadRef = useRef<HTMLDivElement | null>(null)
   const isMobile = useMediaQuery("(max-width: 767px)")
+
+  useEffect(() => {
+    setIsScrolled(false)
+    const root = spreadRef.current
+    if (!root) return
+    const pages = Array.from(root.querySelectorAll<HTMLElement>(".page"))
+    const handler = (e: Event) => {
+      const t = e.currentTarget as HTMLElement
+      setIsScrolled(t.scrollTop > 4)
+    }
+    pages.forEach((p) => p.addEventListener("scroll", handler, { passive: true }))
+    return () => {
+      pages.forEach((p) => p.removeEventListener("scroll", handler))
+    }
+  }, [spread, side])
 
   const isActive = (i: number) =>
     spreads[i]?.active !== false && SPREADS[i]?.active !== false
@@ -134,7 +151,11 @@ export function BookShell({ spreads }: Props) {
     <BookNavProvider value={navValue}>
     <div className={`book-root theme-${theme}`}>
       <div
-        className={"book" + (isCover ? " book--cover" : "")}
+        className={
+          "book" +
+          (isCover ? " book--cover" : "") +
+          (isScrolled ? " is-scrolled" : "")
+        }
         data-mobile-side={side === 0 ? "left" : "right"}
       >
         <Drawer
@@ -179,9 +200,11 @@ export function BookShell({ spreads }: Props) {
           <JahanLogo />
         </button>
 
-        <div className="spread" key={`${spread}-${side}`}>
+        <div className="spread" key={`${spread}-${side}`} ref={spreadRef}>
           {current.node}
         </div>
+
+        {!isCover && <div className="book__topbar" aria-hidden="true" />}
 
         {!isCover && (
           <>
