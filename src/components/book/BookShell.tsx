@@ -3,12 +3,10 @@
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import { BookNavProvider } from "./BookNavContext"
 import { Drawer } from "./Drawer"
-import { Hamburger } from "./Hamburger"
+import { Header } from "./Header"
 import { PageNav } from "./PageNav"
 import { Progress } from "./Progress"
-import { ChapterEyebrow } from "./ChapterEyebrow"
 import { ThemeSwitch } from "./ThemeSwitch"
-import { JahanLogo } from "@/components/svg/JahanLogo"
 import { useKeyboardNav } from "@/hooks/useKeyboardNav"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import {
@@ -171,34 +169,34 @@ export function BookShell({ spreads }: Props) {
           }}
         />
 
-        <Hamburger onClick={() => setDrawerOpen(true)} />
-
-        {!meta.flat && (
-          <>
-            <ChapterEyebrow
-              side="left"
-              chapter={chapterFor(safeSpread)}
-              label={meta.leftLabel ?? meta.label}
-            />
-            <ChapterEyebrow
-              side="right"
-              chapter={chapterFor(safeSpread) + 1}
-              label={meta.rightLabel ?? meta.label}
-            />
-          </>
+        {!isCover && (
+          <Header
+            side="left"
+            chapter={meta.flat ? undefined : chapterFor(safeSpread)}
+            label={meta.flat ? undefined : meta.leftLabel ?? meta.label}
+            showHamburger
+            showLogo={meta.flat || isMobile}
+            onHamburger={() => setDrawerOpen(true)}
+            onLogo={() => {
+              setSpread(0)
+              setSide(0)
+            }}
+          />
         )}
-
-        <button
-          type="button"
-          className="menu-logo"
-          onClick={() => {
-            setSpread(0)
-            setSide(0)
-          }}
-          aria-label="Go to cover"
-        >
-          <JahanLogo />
-        </button>
+        {(isCover || !meta.flat) && (
+          <Header
+            side="right"
+            chapter={isCover ? undefined : chapterFor(safeSpread) + 1}
+            label={isCover ? undefined : meta.rightLabel ?? meta.label}
+            showHamburger={!isCover && isMobile}
+            showLogo
+            onHamburger={() => setDrawerOpen(true)}
+            onLogo={() => {
+              setSpread(0)
+              setSide(0)
+            }}
+          />
+        )}
 
         <div className="spread" key={`${spread}-${side}`} ref={spreadRef}>
           {current.node}
