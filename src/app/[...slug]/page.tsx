@@ -8,20 +8,19 @@ import { ContactSpread } from "@/components/spreads/ContactSpread";
 import { SPREADS } from "@/lib/spreads";
 
 export function generateStaticParams() {
-  const sided = SPREADS.flatMap((s, i) =>
+  return SPREADS.flatMap((s, i) =>
     i === 0 ? [] : [{ slug: [s.id] }, { slug: [s.id, "right"] }],
   );
-  return [{ slug: [] }, ...sided];
 }
 
 type PageProps = {
-  params: Promise<{ slug?: string[] }>;
+  params: Promise<{ slug: string[] }>;
 };
 
 export default async function HomePage({ params }: PageProps) {
   const { slug } = await params;
-  const id = slug?.[0] ?? "portfolio";
-  const sideSeg = slug?.[1];
+  const id = slug[0];
+  const sideSeg = slug[1];
 
   if (!SPREADS.some((s) => s.id === id)) notFound();
   if (sideSeg && sideSeg !== "right") notFound();
